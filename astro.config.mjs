@@ -4,24 +4,16 @@ import solidJs from "@astrojs/solid-js";
 import svelte from "@astrojs/svelte";
 import vue from "@astrojs/vue";
 import image from "@astrojs/image";
-import vercel from "@astrojs/vercel/serverless";
-
 import tailwind from "@astrojs/tailwind";
+import netlify from "@astrojs/netlify/edge-functions";
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [
-    react(),
-    solidJs(),
-    svelte(),
-    vue({
-      jsx: true,
-    }),
-    image({
-      serviceEntryPoint: "@astrojs/image/sharp",
-    }),
-    tailwind(),
-  ],
+  integrations: [react(), solidJs(), svelte(), vue({
+    jsx: true
+  }), image({
+    serviceEntryPoint: "@astrojs/image/sharp"
+  }), tailwind()],
   output: "server",
-  adapter: vercel(),
+  adapter: netlify()
 });
