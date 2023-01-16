@@ -1,0 +1,50 @@
+---
+import Container from "@/components/Container.astro";
+import SiteLayout from "@/layouts/SiteLayout.astro";
+import { client } from "@/lib/urqlClient";
+import { gql } from "@urql/core";
+import dayjs from "dayjs";
+
+//@ts-ignore
+const slug: string = Astro.params?.slug ?? ""
+
+const postQuery = gql`
+  query PostQuery {
+    post(slug: "${slug}", hostname: "") {
+      tags {
+        name
+      }
+      title
+      dateAdded
+      dateUpdated
+      content
+      brief
+    }
+  }
+`;
+
+const res = await client.query(postQuery, {}).toPromise();
+const post = res?.data.post;
+
+const date = dayjs(post.date).format("MMM D, YYYY").toString();
+---
+
+<SiteLayout title={post.title} description={post.brief}>
+  <Container className="mt-16 lg:mt-32">
+    <div class="xl:relative">
+      <div class="mx-auto max-w-2xl">
+        <article>
+          <header class="flex flex-col">
+            <time datetime={post.dateAdded} class="flex items-center text-base text-zinc-400 dark:text-zinc-500">
+              {date}
+            </time>
+            <h1 class="mt-6 text-4xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 sm:text-5xl">
+              {post.title}
+            </h1>
+          </header>
+          <div class="mt-8 prose dark:prose-invert" set:html={post.content}></div>
+        </article>
+      </div>
+    </div>
+  </Container>
+</SiteLayout>

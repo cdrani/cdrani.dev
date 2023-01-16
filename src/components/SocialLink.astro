@@ -1,0 +1,16 @@
+---
+interface Props {
+  href: string;
+  ariaLabel: string;
+  icon: any;
+}
+
+const { href, ariaLabel, icon } = Astro.props as Props;
+const Icon = icon
+---
+
+<a href={href} class="group -m-1 p-1" aria-label={ariaLabel} target="_blank">
+  <Icon
+    className="h-6 w-6 fill-zinc-500 transition group-hover:fill-zinc-600 dark:fill-zinc-400 dark:group-hover:fill-zinc-300"
+  />
+</a>

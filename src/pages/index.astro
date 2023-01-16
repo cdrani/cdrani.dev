@@ -1,0 +1,84 @@
+---
+import { Picture } from "@astrojs/image/components";
+import Container from "../components/Container.astro";
+import SocialLink from "../components/SocialLink.astro";
+import Twitter from "../components/icons/Twitter.astro";
+import Github from "../components/icons/Github.astro";
+import LinkedIn from "../components/icons/LinkedIn.astro";
+import SiteLayout from "../layouts/SiteLayout.astro";
+import Resume from "@/components/Resume.astro";
+import Article from "@/components/Article.svelte";
+import { client } from "@/lib/urqlClient";
+import { post, postsQuery } from "@/lib/queries";
+
+const socials = [
+  {
+    href: "https://twitter.com/c_drani",
+    ariaLabel: "Follow on Twitter",
+    icon: Twitter,
+  },
+  {
+    href: "https://github.com/cdrani",
+    ariaLabel: "Follow on Github",
+    icon: Github,
+  },
+  {
+    href: "https://www.linkedin.com/in/cdrani",
+    ariaLabel: "Follow on LinkedIn",
+    icon: LinkedIn,
+  },
+];
+
+const res = await client.query(postsQuery, {}).toPromise();
+
+const posts = res?.data?.user?.publication?.posts;
+---
+
+<SiteLayout>
+  <Container className="mt-9">
+    <div class="flex justify-between items-center lg:items-start flex-col lg:flex-row">
+      <Picture
+        src="/images/charles.jpeg"
+        widths={[300]}
+        aspectRatio="4:4"
+        sizes="200px, 150px"
+        alt="Charles Drani photo"
+        class="mb-6 md:mb-0 lg:order-2 [&_img]:rounded-xl dark:[&_img]:ring-2 [&_img]:shadow-lg dark:[&_img]:ring-zinc-300/20 lg:rotate-3"
+      />
+      <div class="order-2 lg:order-1 max-w-3xl">
+        <h1 class="text-4xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 sm:text-5xl">Hi, I'm Charles 👋</h1>
+        <p class="mt-6 text-base text-zinc-600 dark:text-zinc-400">
+          I am a Software Developer from Canada. I enjoy building products and solving real-life
+          problems with code. I work primarily as a Full-Stack Developer using React/React Native, Next.js and other
+          frameworks, coupled with a Rails/Django backend.
+        </p>
+        <div class="mt-6 flex gap-6">
+          {socials.map((social) => <SocialLink href={social.href} ariaLabel={social.ariaLabel} icon={social.icon} />)}
+        </div>
+      </div>
+    </div>
+  </Container>
+  <Container className="mt-4 md:mt-28">
+    <div class="mx-auto grid max-w-xl grid-cols-1 gap-y-20 lg:max-w-none lg:grid-cols-2">
+      <div class="flex flex-col gap-16">
+        {
+          posts.map((post: post) => {
+            return (
+              <Article
+                title={post.title}
+                description={post.brief}
+                slug={post.slug}
+                cuid={post.cuid}
+                date={post.dateAdded}
+                content={post.contentMarkdown}
+              />
+            );
+          })
+        }
+      </div>
+      <div class="space-y-10 lg:pl-16 xl:pl-24">
+        <Resume />
+      </div>
+    </div>
+  </Container>
+</SiteLayout>

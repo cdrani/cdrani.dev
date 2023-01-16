@@ -1,0 +1,57 @@
+---
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+const headerTitle = title ?? "Software Developer";
+const headerDesc = description ?? "Charles Drani - Software Developer";
+---
+
+<!DOCTYPE html>
+<html lang="en" class="h-full antialiased">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Charles Drani | {headerTitle}</title>
+    <meta name="description" content={headerDesc} />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <script is:inline>
+      const theme = (() => {
+        if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
+          return localStorage.getItem("theme");
+        }
+        if (window.matchMedia("(prefers-colors-scheme: dark)").matches) {
+          return "dark";
+        } else {
+          return "light";
+        }
+      })();
+
+      if (theme === "light") {
+        document.documentElement.classList.remove("dark");
+      } else {
+        document.documentElement.classList.add("dark");
+      }
+    </script>
+  </head>
+  <body class="flex h-full flex-col bg-stone-200 dark:bg-zinc-900">
+    <div class="fixed inset-0 flex justify-center sm:px-8">
+      <div class="flex w-full max-w-7xl lg:px-8">
+        <div class="w-full bg-stone-100 ring-1 ring-zinc-100 dark:bg-gray-900 dark:ring-zinc-300/20 shadow-lg"></div>
+      </div>
+    </div>
+    <div class="relative">
+      <Header />
+      <main>
+        <slot />
+      </main>
+      <Footer />
+    </div>
+  </body>
+</html>

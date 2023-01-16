@@ -1,0 +1,61 @@
+---
+import { Image } from "@astrojs/image/components";
+import Button from "./Button.astro";
+import Briefcase from "./icons/Briefcase.astro";
+
+const resume = [
+  {
+    company: "Matter Product Studio",
+    title: "Full-Stack Engineer",
+    logo: "/images/matter.jpeg",
+    start: "2019",
+    end: "2022",
+    link: "https://matterproductstudio.com",
+  },
+  {
+    company: "Microverse",
+    title: "Technical Project Reviewer",
+    logo: "/images/microverse.jpeg",
+    start: "2019",
+    end: "2021",
+    link: "https://microverse.org",
+  },
+];
+---
+
+<div class="rounded-2xl border border-zinc-200 dark:border-gray-600 shadow-md p-6 dark:border-zinc-700/40">
+  <h2 class="flex items-center text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+    <Briefcase className="h-6 w-6 flex-none" secondaryClass="fill-gray-500" primaryClass="fill-amber-500 dark:fill-violet-400" />
+    <span class="ml-3">Work</span>
+  </h2>
+  <ol class="mt-6 space-y-4">
+    {
+      resume.map((role, i) => (
+        <li class="flex gap-4">
+          <div class="relative mt-1 flex h-10 w-10 flex-none items-center justify-center rounded-full shadow-md shadow-zinc-800/5 ring-1 ring-zinc-900/5 dark:border dark:border-zinc-700/50 dark:bg-zinc-800 dark:ring-0">
+            <Image src={role.logo} width={30} aspectRatio="4:4" alt={role.company} class="rounded-full" />
+          </div>
+          <dl class="flex flex-auto flex-wrap gap-x-2">
+            <dt class="sr-only">Company</dt>
+            <dd class="w-full flex-none text-sm font-medium text-zinc-900 dark:text-zinc-100">{role.company}</dd>
+            <dt class="sr-only">Role</dt>
+            <dd class="text-xs text-zinc-500 dark:text-zinc-400">{role.title}</dd>
+            <dt class="sr-only">Date</dt>
+            <dd class="ml-auto text-xs text-zinc-400 dark:text-zinc-500">
+              <time>{role.start} </time> <span>-</span> <time>{role.end}</time>
+            </dd>
+          </dl>
+        </li>
+      ))
+    }
+  </ol>
+  
+  {/*
+    <Button
+      href="https://drive.google.com/file/d/1ayOmhX7hjRPUkXAvB3hx8CrV8DZ9rgjS/view?usp=sharing"
+      target="_blank"
+      variant="secondary"
+      className="group mt-6 w-full">Download CV</Button
+    >
+  */}
+</div>

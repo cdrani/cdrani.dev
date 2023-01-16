@@ -1,0 +1,45 @@
+---
+import Card from "@/components/Card.svelte";
+import CardDescription from "@/components/CardDescription.svelte";
+import CardTitle from "@/components/CardTitle.svelte";
+import CardReading from "@/components/CardReading.svelte";
+import CardDate from "@/components/CardDate.svelte";
+import Container from "@/components/Container.astro";
+import SiteLayout from "@/layouts/SiteLayout.astro";
+import { postsQuery } from "@/lib/queries";
+import type { post } from "@/lib/queries";
+
+import { client } from "@/lib/urqlClient";
+import CardMetadata from "@/components/CardMetadata.svelte";
+
+const res = await client.query(postsQuery, {}).toPromise();
+
+const posts = res?.data?.user?.publication?.posts;
+---
+
+<SiteLayout title="Posts">
+  <Container className="mt-16 sm:mt-24">
+    <h2 class="text-2xl font-bold text-zinc-800 dark:text-zinc-100">Posts</h2>
+    <div class="mt-16 sm:mt-20">
+      <div class="flex max-w-4xl mx-auto flex-col space-y-16">
+        {
+          posts.map((post: post) => {
+            return (
+              <article class="md:grid md:grid-cols-4 md:items-baseline">
+                <Card className="md:col-span-3">
+                  <CardTitle href={`/posts/${post.slug}-${post.cuid}`}>{post.title}</CardTitle>
+                  <CardDescription>{post.brief}</CardDescription>
+                  <div class="mt-1 flex items-center justify-center relative z-10">
+                    <CardDate className="mr-4 md:hidden" date={post.dateAdded} />
+                    <CardReading content={post.contentMarkdown} />
+                  </div>
+                </Card>
+                <CardDate date={post.dateAdded} className="order-first hidden md:block" />
+              </article>
+            );
+          })
+        }
+      </div>
+    </div>
+  </Container>
+</SiteLayout>

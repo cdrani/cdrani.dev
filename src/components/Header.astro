@@ -1,0 +1,28 @@
+---
+import Container from "./Container.astro";
+import DesktopNav from "./DesktopNav.astro";
+import Logo from "./Logo.astro";
+import MobileNav from "./MobileNav";
+import ThemeToggle from "./ThemeToggle";
+---
+
+<header class="pointer-events-none relative z-50 flex flex-col">
+  <div class="top z-10 h-16 pt-6">
+    <Container className="w-full">
+      <div class="relative flex gap-4">
+        <div class="flex flex-1">
+          <Logo />
+        </div>
+        <div class="flex flex-1 justify-end md:justify-center">
+          <MobileNav client:idle client:visible className="pointer-events-auto md:hidden" />
+          <DesktopNav className="pointer-events-auto hidden md:block" />
+        </div>
+        <div class="flex justify-end md:flex-1">
+          <div class="pointer-events-auto">
+            <ThemeToggle client:idle />
+          </div>
+        </div>
+      </div>
+    </Container>
+  </div>
+</header>
